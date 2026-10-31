@@ -138,7 +138,7 @@ call deletes it.
 - [Threat model](docs/THREAT_MODEL.md): what can go wrong and which test proves each defense
 - [Google setup](docs/GOOGLE_SETUP.md): connect your own calendar and mail, read-only
 - [Deploy to Railway](docs/DEPLOY_RAILWAY.md): Supabase, environment, domain and cron
-- [Siri readiness](docs/SIRI_READINESS.md): how each action maps to App Intents (design note, no code)
+- [Front-door readiness](docs/FRONT_DOOR_READINESS.md): how each action maps to Apple App Intents and to Android assistant hooks (design note, no code)
 - [Case study](docs/case_study.md): measured results
 
 ## Known limits
