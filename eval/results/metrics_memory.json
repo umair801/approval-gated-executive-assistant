@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-10-17T14:33:43+00:00",
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "store": "memory",
+    "data_mode": "sample",
+    "llm_mode": "mock",
+    "model": null,
+    "runs": 30
+  },
+  "latency_ms": {
+    "morning_briefing": {
+      "n": 30,
+      "mean": 4.11,
+      "p50": 3.59,
+      "p95": 6.93,
+      "min": 3.26,
+      "max": 13.19
+    },
+    "plan_a_dinner": {
+      "n": 30,
+      "mean": 4.75,
+      "p50": 4.7,
+      "p95": 5.31,
+      "min": 4.35,
+      "max": 5.83
+    }
+  },
+  "latency_includes_model_time": false,
+  "llm_calls_per_flow": {
+    "morning_briefing": 1.0,
+    "plan_a_dinner": 3.0
+  },
+  "cost_per_briefing_usd": null,
+  "cost_per_dinner_plan_usd": null,
+  "cost_note": "Not measured: run with ANTHROPIC_API_KEY to use Claude.",
+  "tokens_per_briefing": null,
+  "approval": {
+    "write_actions_proposed": 60,
+    "write_actions_executed": 60,
+    "executed_with_recorded_approval": 60,
+    "approval_coverage_pct": 100.0,
+    "bypass_attempts": 120,
+    "bypass_attempts_blocked": 120,
+    "audit_chains_verified": 30
+  },
+  "tests": null,
+  "price_configured": false
+}

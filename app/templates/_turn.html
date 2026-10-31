@@ -1,0 +1,7 @@
+<div class="msg user"><span class="txt">{{ user_text }}</span></div>
+<div class="msg bot"><span class="txt">{{ reply }}</span>{% if res and res.action_ids %}
+  <div class="small" style="margin-top:8px">
+    {% if plan_id %}<a href="/dinner/{{ plan_id }}">See the options</a> · {% endif %}<a href="/approvals">Review {{ res.action_ids|length }} proposed action{{ 's' if res.action_ids|length != 1 }}</a>
+  </div>{% elif res and res.intent == 'briefing' %}<div class="small" style="margin-top:8px"><a href="/plan">Open today's plan</a></div>{% endif %}
+</div>
+<input id="msg" type="text" name="message" placeholder="Ask for a briefing, or plan a dinner..." maxlength="500" autocomplete="off" required aria-label="Message" hx-swap-oob="true">

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Audit log{% endblock %}
+{% block body %}
+<div class="row sp"><h1>Audit log</h1>
+  <span class="badge {{ 'b-ok' if chain_ok else 'b-bad' }}" role="status">{{ 'Hash chain verified' if chain_ok else 'Chain broken at #' ~ bad_seq }}</span></div>
+<p class="sub">Every read, proposal, edit, approval and execution is recorded. Entries are append-only and hash-chained, so a changed or deleted entry is detectable.</p>
+<p class="small">{% if hide_reads %}<a href="/audit">Show reads too</a>{% else %}<a href="/audit?hide_reads=1">Hide read-only tool calls</a>{% endif %}</p>
+<div class="card" style="padding:6px 10px;overflow-x:auto">
+<table>
+  <thead><tr><th>#</th><th>Time</th><th>Event</th><th>Actor</th><th>Action</th><th>Details</th></tr></thead>
+  <tbody>
+  {% for e in entries %}
+    <tr><td class="mono">{{ e.seq }}</td><td class="small" style="white-space:nowrap">{{ e.ts|dt }}</td>
+      <td><span class="badge {{ 'b-ok' if e.event in ('action_executed','approval_recorded') else ('b-bad' if e.event in ('tamper_detected','write_blocked','action_failed','suspicious_content_ignored') else ('b-pending' if e.event in ('action_proposed','action_edited') else 'b-info')) }}">{{ e.event }}</span></td>
+      <td class="small">{{ e.actor }}</td><td class="mono">{{ e.action_id or '' }}</td>
+      <td class="small muted" style="word-break:break-word;min-width:260px">{% for k, v in e.details.items() %}{{ k }}={{ v if v is string or v is number else v|tojson }}{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>
+  {% else %}<tr><td colspan="6" class="muted">No entries yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+{% endblock %}

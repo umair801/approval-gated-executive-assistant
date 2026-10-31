@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Memory{% endblock %}
+{% block body %}
+<h1>Memory</h1>
+<p class="sub">What I remember to plan better. Minimal by design, and you can edit or delete all of it.</p>
+{% if saved %}<div class="banner" role="status">Saved.</div>{% endif %}
+<h2>Preferences</h2>
+<form class="card" method="post" action="/ui/memory/prefs">
+  <label for="ha">Home area</label><input id="ha" type="text" name="home_area" value="{{ prefs.home_area or '' }}" maxlength="60">
+  <label for="fc">Favorite cuisines (comma separated)</label><input id="fc" type="text" name="favorite_cuisines" value="{{ (prefs.favorite_cuisines or [])|join(', ') }}">
+  <label for="mp">Maximum price level (1 to 4)</label><input id="mp" type="number" name="max_price_level" min="1" max="4" value="{{ prefs.max_price_level or '' }}">
+  <label for="vip">VIP senders (comma separated names)</label><input id="vip" type="text" name="vip_senders" value="{{ (prefs.vip_senders or [])|join(', ') }}">
+  <p><button class="primary" type="submit">Save preferences</button></p>
+</form>
+<h2>Contacts</h2>
+<div class="card" style="padding:6px 10px"><table><thead><tr><th>Name</th><th>Handle</th><th>Notes</th></tr></thead><tbody>
+{% for c in contacts %}<tr><td>{{ c.name }}</td><td>{{ c.handle or '' }}</td><td class="muted">{{ c.notes or '' }}</td></tr>{% else %}<tr><td colspan="3" class="muted">No contacts yet.</td></tr>{% endfor %}</tbody></table></div>
+<form class="card" method="post" action="/ui/memory/contact">
+  <div class="grid"><div><label for="cn">Name</label><input id="cn" type="text" name="name" required maxlength="60"></div>
+  <div><label for="ch">Handle (email or phone)</label><input id="ch" type="text" name="handle" maxlength="120"></div></div>
+  <label for="cno">Notes</label><input id="cno" type="text" name="notes" maxlength="200">
+  <p><button type="submit">Save contact</button></p>
+</form>
+{% if settings.mode == 'private' and data_mode == 'google' %}
+<h2>Google</h2>
+<div class="card"><p>{% if google_connected %}<span class="badge b-ok">Connected</span> Calendar and Gmail, read-only.{% else %}<span class="badge b-pending">Not connected</span>{% endif %}</p>
+  <a class="btn" href="/auth/google/start">{{ 'Reconnect' if google_connected else 'Connect' }} Google (read-only)</a>
+  <p class="small muted" style="margin-bottom:0">Scopes: calendar.readonly and gmail.readonly. Only sender, subject, date and snippet are read. Email bodies are never fetched.</p></div>
+{% endif %}
+{% endblock %}

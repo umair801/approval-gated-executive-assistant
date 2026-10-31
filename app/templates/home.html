@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+{% if settings.mode == 'demo' %}<div class="banner"><strong>Public demo.</strong> You get your own private sandbox with fictional data. It is deleted after 24 hours. Sending, booking and paying are simulated and still need your approval.</div>
+{% elif data_mode == 'sample' %}<div class="banner"><strong>Sample data mode.</strong> The calendar, email and contacts are fictional. Sending, booking and paying are simulated.</div>{% endif %}
+<h1>What should I plan?</h1>
+<p class="sub">I read your calendar and email automatically. Anything that sends, books or pays waits for your approval.</p>
+<div class="quick">
+  <button hx-post="/ui/chat" hx-vals='{"message":"Give me my morning briefing"}' hx-target="#thread" hx-swap="beforeend" hx-indicator="#spin">Morning briefing</button>
+  <button hx-post="/ui/chat" hx-vals='{"message":"Plan dinner with Sam on Friday"}' hx-target="#thread" hx-swap="beforeend" hx-indicator="#spin">Plan dinner with Sam on Friday</button>
+  <button hx-post="/ui/chat" hx-vals='{"message":"Plan a vegetarian dinner with Priya this weekend"}' hx-target="#thread" hx-swap="beforeend" hx-indicator="#spin">Vegetarian dinner this weekend</button>
+</div>
+<section id="thread" class="thread" aria-live="polite" aria-label="Conversation">
+{% for m in messages %}
+  <div class="msg {{ 'user' if m.role=='user' else 'bot' }}"><span class="txt">{{ m.text }}</span>{% if m.role == 'assistant' and m.meta %}
+    {% if m.meta.intent == 'dinner' and m.meta.plan_id %}<div class="small" style="margin-top:6px"><a href="/dinner/{{ m.meta.plan_id }}">See the options</a>{% if m.meta.action_ids %} · <a href="/approvals">Review {{ m.meta.action_ids|length }} proposed action{{ 's' if m.meta.action_ids|length != 1 }}</a>{% endif %}</div>
+    {% elif m.meta.intent == 'briefing' %}<div class="small" style="margin-top:6px"><a href="/plan">Open today's plan</a></div>{% endif %}{% endif %}</div>
+{% endfor %}
+</section>
+<form class="composer" hx-post="/ui/chat" hx-target="#thread" hx-swap="beforeend" hx-indicator="#spin">
+  <input id="msg" type="text" name="message" placeholder="Ask for a briefing, or plan a dinner..." maxlength="500" autocomplete="off" required aria-label="Message">
+  <button class="primary" type="submit">Send</button>
+  <span id="spin" class="spin" role="status">Working...</span>
+</form>
+{% endblock %}

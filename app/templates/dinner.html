@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Dinner options{% endblock %}
+{% block body %}
+{% set r = plan.request %}
+<h1>Dinner{% if r.friend_name %} with {{ r.friend_name }}{% endif %}</h1>
+<p class="sub">{{ r.party_size }} {{ 'person' if r.party_size == 1 else 'people' }} · {{ r.date_from }}{% if r.date_to != r.date_from %} to {{ r.date_to }}{% endif %}{% if r.cuisine %} · {{ r.cuisine }}{% endif %}{% if r.dietary %} · {{ r.dietary|join(', ') }}{% endif %}</p>
+{% for w in plan.warnings %}<div class="conf">{{ w }}</div>{% endfor %}
+
+<h2>Free slots I found</h2>
+<div class="card">{% for s in plan.slots %}<div class="ev"><time>{{ s.start|dt }}</time><div>until {{ s.end|hm }}{% if loop.first %} <span class="badge b-info">best</span>{% endif %}</div></div>{% endfor %}</div>
+
+<h2>Shortlist</h2>
+<div class="grid">
+{% for o in plan.options %}
+  <article class="card opt {{ 'sel' if chosen == o.restaurant.id }}">
+    <div class="row sp"><strong>{{ o.restaurant.name }}</strong><span class="muted">{{ '$' * o.restaurant.price_level }}</span></div>
+    <div class="muted small">{{ o.restaurant.cuisine }} · {{ o.restaurant.neighborhood }} · rated {{ o.restaurant.rating }}</div>
+    <p class="small">{{ o.note }}</p>
+    {% if o.restaurant.dietary %}<div class="small muted">{{ o.restaurant.dietary|join(', ') }}</div>{% endif %}
+    <div class="row" style="margin-top:8px">
+      {% if chosen == o.restaurant.id %}<span class="badge b-ok">Selected</span>
+      {% else %}<form method="post" action="/ui/dinner/{{ plan_id }}/choose"><input type="hidden" name="restaurant_id" value="{{ o.restaurant.id }}"><button type="submit">Choose this one</button></form>{% endif %}
+      {% if o.restaurant.link %}<a class="small" href="{{ o.restaurant.link }}" target="_blank" rel="noopener noreferrer">Open in Maps</a>{% endif %}
+    </div>
+  </article>
+{% endfor %}
+</div>
+
+{% if plan.draft_message %}<h2>Draft message</h2><div class="card"><p style="margin:0">{{ plan.draft_message }}</p>
+  <p class="small muted" style="margin-bottom:0">Not sent. You can edit it and approve it on the approvals page.</p></div>{% endif %}
+<p><a class="btn primary" href="/approvals">Review and approve</a></p>
+{% endblock %}

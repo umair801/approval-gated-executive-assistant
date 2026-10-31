@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Approvals{% endblock %}
+{% block body %}
+<h1>Approvals</h1>
+<p class="sub">Nothing is sent, booked or paid until you approve it here. Each approval is recorded and runs exactly once.</p>
+<section aria-label="Pending">
+{% for a in pending %}{% include "_action_card.html" %}
+{% else %}<div class="card"><p class="muted" style="margin:0">Nothing is waiting for you. Ask for a dinner plan on the <a href="/">chat page</a>.</p></div>{% endfor %}
+</section>
+{% if history %}<h2>History</h2>
+<section aria-label="History">{% for a in history %}{% include "_action_card.html" %}{% endfor %}</section>{% endif %}
+{% endblock %}

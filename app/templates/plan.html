@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Today's plan{% endblock %}
+{% block body %}
+<div class="row sp"><h1>Today's plan</h1>
+  <form method="post" action="/ui/briefing"><button class="primary" type="submit">Run briefing now</button></form></div>
+{% if not plan %}
+  <div class="card"><p>No briefing yet. Run one now, or let the scheduled job send it each morning.</p></div>
+{% else %}
+  {% set p = plan.plan %}
+  <p class="sub">{{ p.date }} · generated {{ created|dt }}</p>
+  <div class="card"><h2 style="margin-top:0">{{ p.headline }}</h2><p>{{ p.summary }}</p></div>
+
+  {% if p.conflicts %}<h2>Conflicts</h2>
+    {% for c in p.conflicts %}<div class="conf"><span class="badge b-pending">{{ c.kind|replace('_',' ') }}</span> {{ c.note }}</div>{% endfor %}{% endif %}
+
+  {% if p.priorities %}<h2>Priorities</h2><div class="card"><ol style="margin:0;padding-left:20px">
+    {% for pr in p.priorities|sort(attribute='rank') %}
+      <li style="margin:6px 0">
+        {% if pr.ref_type == 'email' and plan.emails.get(pr.ref_id) %}<strong>{{ plan.emails[pr.ref_id].subject }}</strong> <span class="muted small">from {{ plan.emails[pr.ref_id].sender }}</span>
+        {% else %}{% for e in plan.schedule if e.id == pr.ref_id %}<strong>{{ e.title }}</strong> <span class="muted small">{{ e.start|hm }}</span>{% endfor %}{% endif %}
+        <div class="small muted">{{ pr.reason }}</div></li>
+    {% endfor %}</ol></div>{% endif %}
+
+  <h2>Schedule</h2><div class="card">
+    {% for e in plan.schedule %}<div class="ev {{ 'bad' if e.conflict }}"><time>{{ e.start|hm }} to {{ e.end|hm }}</time><div><strong>{{ e.title }}</strong>{% if e.location %} <span class="muted small">· {{ e.location }}</span>{% endif %}{% if e.conflict %} <span class="badge b-pending">conflict</span>{% endif %}</div></div>
+    {% else %}<p class="muted">No events today.</p>{% endfor %}</div>
+
+  {% if p.focus_blocks %}<h2>Focus windows</h2><div class="card">
+    {% for f in p.focus_blocks %}<div class="ev"><time>{{ f.start|hm }} to {{ f.end|hm }}</time><div>Free for deep work</div></div>{% endfor %}</div>{% endif %}
+
+  {% if plan.tomorrow %}<h2>Tomorrow</h2><div class="card">
+    {% for e in plan.tomorrow %}<div class="ev"><time>{{ e.start|hm }} to {{ e.end|hm }}</time><div>{{ e.title }}</div></div>{% endfor %}</div>{% endif %}
+
+  {% for n in p.notes %}<div class="{{ 'sec' if 'instructions' in n else 'banner' }}">{{ n }}</div>{% endfor %}
+{% endif %}
+{% endblock %}

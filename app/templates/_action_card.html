@@ -1,0 +1,32 @@
+<article class="card" id="act-{{ a.action_id }}">
+  <div class="row sp">
+    <div><strong>{{ {'send_message':'Send message','book_table':'Book a table','pay':'Payment'}[a.kind] }}</strong>
+      <span class="badge b-{{ a.status }}">{{ a.status }}</span></div>
+    <span class="muted small mono">{{ a.action_id }}</span>
+  </div>
+  <p style="margin:.5em 0">{{ a.summary }}</p>
+  <form>
+    {% if a.kind == 'send_message' %}
+      <dl class="kv"><dt>To</dt><dd>{{ a.payload.to }}</dd></dl>
+      {% if a.status == 'pending' %}<label for="t-{{ a.action_id }}">Message (you can edit before approving)</label>
+        <textarea id="t-{{ a.action_id }}" name="edited_text" maxlength="600">{{ a.payload.text }}</textarea>
+      {% else %}<dl class="kv"><dt>Message</dt><dd>{{ a.payload.text }}</dd></dl>{% endif %}
+    {% elif a.kind == 'book_table' %}
+      <dl class="kv"><dt>Restaurant</dt><dd>{{ a.payload.restaurant_name }}</dd><dt>When</dt><dd>{{ a.payload.start|dt }} to {{ a.payload.end|hm }}</dd><dt>Party of</dt><dd>{{ a.payload.party_size }}</dd>
+      {% if a.payload.link %}<dt>Link</dt><dd><a href="{{ a.payload.link }}" target="_blank" rel="noopener noreferrer">Open in Maps</a></dd>{% endif %}</dl>
+    {% else %}
+      <dl class="kv"><dt>Payee</dt><dd>{{ a.payload.payee }}</dd><dt>Amount</dt><dd>{{ a.payload.amount }} {{ a.payload.currency }}</dd></dl>
+    {% endif %}
+    {% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+    {% if a.status == 'pending' %}
+      <div class="row" style="margin-top:12px">
+        <button class="primary" hx-post="/ui/approvals/{{ a.action_id }}/approve" hx-include="closest form" hx-target="#act-{{ a.action_id }}" hx-swap="outerHTML" type="button">Approve</button>
+        <button class="danger" hx-post="/ui/approvals/{{ a.action_id }}/reject" hx-target="#act-{{ a.action_id }}" hx-swap="outerHTML" type="button">Reject</button>
+        <span class="small muted">Expires {{ a.expires_at|dt }}</span>
+      </div>
+    {% elif a.status == 'executed' %}
+      <p class="small" style="margin-bottom:0"><span class="badge b-ok">Done</span> Confirmation <span class="mono">{{ a.result.confirmation }}</span>{% if a.result.simulated %} · simulated, nothing left this system{% endif %} · approved by {{ a.decided_by }} at {{ a.decided_at|dt }}</p>
+    {% elif a.status in ('rejected','superseded') %}<p class="small muted" style="margin-bottom:0">{{ a.status|capitalize }}{% if a.result and a.result.reason %}: {{ a.result.reason }}{% endif %}. Nothing was done.</p>
+    {% elif a.status == 'expired' %}<p class="small muted" style="margin-bottom:0">Expired without approval. Nothing was done.</p>{% endif %}
+  </form>
+</article>

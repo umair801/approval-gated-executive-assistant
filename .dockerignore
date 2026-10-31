@@ -1,0 +1,11 @@
+.env
+.venv
+venv
+__pycache__
+.pytest_cache
+tests
+internal
+docs
+eval
+*.tar.gz
+.git

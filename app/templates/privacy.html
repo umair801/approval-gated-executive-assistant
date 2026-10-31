@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Privacy{% endblock %}
+{% block body %}
+<h1>Privacy and your data</h1>
+<p class="sub">The assistant stores the minimum it needs and you can export or delete everything.</p>
+<h2>What is stored</h2>
+<div class="card"><table><thead><tr><th>Data</th><th>Why</th><th>Items</th></tr></thead><tbody>
+<tr><td>Preferences and contacts</td><td>Plan dinners and rank mail the way you like</td><td>{{ counts.preferences }} prefs, {{ counts.contacts }} contacts</td></tr>
+<tr><td>Chat messages</td><td>Show the conversation</td><td>{{ counts.messages }}</td></tr>
+<tr><td>Plans</td><td>Show today's plan and dinner options (no email bodies)</td><td>{{ counts.plans }}</td></tr>
+<tr><td>Proposed actions and approvals</td><td>The approval queue</td><td>{{ counts.actions }} actions, {{ counts.approvals }} approvals</td></tr>
+<tr><td>Audit log</td><td>Prove what happened and who approved it</td><td>{{ counts.audit_log }}</td></tr>
+<tr><td>Google refresh token</td><td>Read your calendar and mail (encrypted at rest)</td><td>{{ counts.connected_providers }}</td></tr>
+</tbody></table></div>
+<div class="banner">Email content is read on demand and never stored. Only the sender and subject of the mail that made your priority list are kept inside that day's plan.</div>
+<p><a class="btn" href="/api/me/data" download="my-data.json">Download my data (JSON)</a></p>
+<h2>Delete everything</h2>
+<form class="card" method="post" action="/ui/delete-my-data">
+  <p>This removes your preferences, contacts, messages, plans, actions, approvals, tokens and audit log. A short tombstone with a hashed id and counts stays in the system log. This cannot be undone.</p>
+  <label style="display:flex;gap:8px;align-items:center;color:var(--ink)"><input type="checkbox" name="confirm" value="yes" required style="width:auto"> I understand</label>
+  <p><button class="danger" type="submit">Delete all my data</button></p>
+</form>
+{% endblock %}

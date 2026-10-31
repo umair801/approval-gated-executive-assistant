@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block body %}
+<div class="card" style="max-width:420px;margin:40px auto">
+  <h1>Sign in</h1>
+  <p class="sub">This assistant is private. Enter your access token.</p>
+  <form method="post" action="/login">
+    <label for="token">Access token</label>
+    <input id="token" name="token" type="password" autocomplete="current-password" required autofocus>
+    {% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+    <p><button class="primary" type="submit">Sign in</button></p>
+  </form>
+</div>
+{% endblock %}

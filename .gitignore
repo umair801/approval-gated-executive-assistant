@@ -1,0 +1,12 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+# Internal notes, never publish
+internal/
+*.tar.gz
+# Raw run artifacts (metrics.json is kept)
+eval/results/*.tmp

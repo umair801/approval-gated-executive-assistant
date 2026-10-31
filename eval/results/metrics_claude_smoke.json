@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-10-31T04:52:52+00:00",
+  "environment": {
+    "python": "3.12.0",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "store": "memory",
+    "data_mode": "sample",
+    "llm_mode": "claude",
+    "model": "claude-sonnet-5-5",
+    "runs": 3
+  },
+  "latency_ms": {
+    "morning_briefing": {
+      "n": 3,
+      "mean": 7621.72,
+      "p50": 7611.31,
+      "p95": 7701.42,
+      "min": 7542.43,
+      "max": 7711.43
+    },
+    "plan_a_dinner": {
+      "n": 3,
+      "mean": 7392.28,
+      "p50": 7349.72,
+      "p95": 7549.77,
+      "min": 7255.11,
+      "max": 7572.0
+    }
+  },
+  "latency_includes_model_time": true,
+  "llm_calls_per_flow": {
+    "morning_briefing": 1.0,
+    "plan_a_dinner": 3.0
+  },
+  "cost_per_briefing_usd": 0.017271,
+  "cost_per_dinner_plan_usd": 0.012869,
+  "cost_note": null,
+  "tokens_per_briefing": 3770,
+  "approval": {
+    "write_actions_proposed": 6,
+    "write_actions_executed": 6,
+    "executed_with_recorded_approval": 6,
+    "approval_coverage_pct": 100.0,
+    "bypass_attempts": 12,
+    "bypass_attempts_blocked": 12,
+    "audit_chains_verified": 3
+  },
+  "tests": {
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 0.1,
+    "exit_code": 1
+  },
+  "price_configured": true
+}
