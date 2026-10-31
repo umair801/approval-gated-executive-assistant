@@ -102,7 +102,6 @@ Everything is an environment variable. See `.env.example` for the full list.
 | `DATA_MODE` | `sample` (default) or `google` (your own read-only calendar and mail). |
 | `ANTHROPIC_API_KEY`, `CLAUDE_MODEL` | Use Claude instead of the built-in mock. |
 | `DATABASE_URL` | Supabase / PostgreSQL. Empty means in-memory. The schema is applied on start. |
-| `TABLE_PREFIX` | Optional. Prefix for every table and index, so several projects can share one database. |
 | `TOKEN_ENCRYPTION_KEY` | Fernet key that encrypts stored OAuth tokens. Required in production. |
 | `CRON_TOKEN` | Lets a scheduled job call `POST /api/jobs/briefing`. |
 
@@ -138,7 +137,7 @@ call deletes it.
 - [Threat model](docs/THREAT_MODEL.md): what can go wrong and which test proves each defense
 - [Google setup](docs/GOOGLE_SETUP.md): connect your own calendar and mail, read-only
 - [Deploy to Railway](docs/DEPLOY_RAILWAY.md): Supabase, environment, domain and cron
-- [Front-door readiness](docs/FRONT_DOOR_READINESS.md): how each action maps to Apple App Intents and to Android assistant hooks (design note, no code)
+- [Siri readiness](docs/SIRI_READINESS.md): how each action maps to App Intents (design note, no code)
 - [Case study](docs/case_study.md): measured results
 
 ## Known limits

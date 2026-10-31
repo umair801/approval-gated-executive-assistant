@@ -55,7 +55,7 @@ procurement and invoice approval, and customer communication drafted by an agent
 
 ## Stack
 
-LangGraph, Claude (forced tool call + Pydantic validation), FastAPI, Jinja2 and HTMX, Supabase / PostgreSQL,
+LangGraph, Claude (structured tool output + Pydantic validation), FastAPI, Jinja2 and HTMX, Supabase / PostgreSQL,
 Docker, Railway. Google Calendar and Gmail through read-only scopes.
 
 ## Limits and next steps

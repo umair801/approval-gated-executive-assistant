@@ -30,22 +30,22 @@ queue. Nothing happens until the user approves, and every step lands in a hash-c
 
 ## Results (measured)
 
-All numbers below come from `scripts/measure.py` (10 runs per flow, 2026-10-31) and the test suite.
+All numbers below come from `scripts/measure.py` (30 runs per flow, 2026-10-17) and the test suite.
 Nothing is estimated.
 
 | Metric | Result |
 |---|---|
-| Approval coverage of write actions | **100.0%** (20 of 20 executed writes had a recorded approval) |
+| Approval coverage of write actions | **100.0%** (60 of 60 executed writes had a recorded approval) |
 | Write actions executed without approval | **0** |
-| Bypass attempts blocked | **40 of 40** (direct write-tool calls, executor calls without approval, payload tampering) |
-| Morning briefing latency | p50 **7708.48 ms**, p95 8066.45 ms |
-| Plan-a-dinner latency | p50 **8713.74 ms**, p95 13905.33 ms |
+| Bypass attempts blocked | **120 of 120** (direct write-tool calls, executor calls without approval, payload tampering) |
+| Morning briefing latency | p50 **16.98 ms**, p95 21.75 ms |
+| Plan-a-dinner latency | p50 **22.77 ms**, p95 31.7 ms |
 | Model calls per flow | briefing 1.0, dinner 3.0 |
-| Cost per briefing | $0.017274 |
-| Automated tests | **120 passed, 0 failed** |
-| Audit chains verified | 10 of 10 runs |
+| Cost per briefing | Not measured yet. It needs a run with a real model key and your price settings. |
+| Automated tests | **168 passed, 0 failed, 3 skipped (suite run against PostgreSQL; the memory-only run has fewer because some tests are store-specific)** |
+| Audit chains verified | 30 of 30 runs |
 
-**Scope of the latency numbers.** Measured with the real Claude model, so they include model response time.
+**Scope of the latency numbers.** Measured with the built-in deterministic model and a postgres store, so they cover orchestration, data access, analysis and the approval logic, but **not** model response time. Rerun `scripts/measure.py` with `ANTHROPIC_API_KEY` set to measure end-to-end latency.
 
 ## Where this pattern fits
 

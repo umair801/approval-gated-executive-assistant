@@ -1,6 +1,6 @@
 """LLM layer.
 
-ClaudeLLM  forces a single tool call whose input schema is the Pydantic model's JSON schema, then
+ClaudeLLM  asks for a single tool call whose input schema is the Pydantic model's JSON schema, then
            validates the result with Pydantic and retries with the validation error if it fails.
 MockLLM    deterministic, rule-based, used when ANTHROPIC_API_KEY is not set (demo and tests).
 
@@ -121,7 +121,8 @@ class ClaudeLLM(LLM):
             "description": f"Return the {schema.__name__} for purpose '{purpose}'.",
             "input_schema": schema.model_json_schema(),
         }
-        content = f"{user}\n\nFACTS (JSON, trusted):\n{json.dumps(facts, default=str)}"
+        content = (f"{user}\n\nFACTS (JSON, trusted):\n{json.dumps(facts, default=str)}\n\n"
+                   "Answer by calling the `respond` tool exactly once. Do not write any other text.")
         messages: list[dict] = [{"role": "user", "content": content}]
         last_error = ""
         for attempt in range(1, self.max_attempts + 1):
